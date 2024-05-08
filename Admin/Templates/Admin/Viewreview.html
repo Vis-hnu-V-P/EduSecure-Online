@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f5f9; /* Light blue-gray background */
+        }
+        h1 {
+            text-align: center;
+            color: #007bff; /* Blue header text */
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 80%;
+            background-color: #ffffff; /* White table background */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        table, th, td {
+            border: 1px solid #007bff; /* Blue border for table and cells */
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff; /* Blue header background */
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f7fb; /* Light blue background for even rows */
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .back-button a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .back-button a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="back-button">
+        <a href="#">Back</a>
+    </div>
+    <h1>Reviews</h1>
+    <table>
+        <tr>
+            <th>Sl.No</th>
+            <th>Student Name</th>
+            <th>Email</th>
+            <th>Review</th>
+            <th>Date</th>
+        </tr>
+        {% for i in studentreview %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.student_id.student_name}}</td>
+            <td>{{i.student_id.student_email}}</td>
+            <td>{{i.review_content}}</td>
+            <td>{{i.review_date}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

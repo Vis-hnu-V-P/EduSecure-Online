@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        img {
+            display: block;
+            margin: auto;
+            max-width: 100%;
+            height: auto;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="back-button">
+        <a href="{% url 'wadmin:homepage' %}">Back</a>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <table>
+        <tr>
+            <th>Sl.no</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Photo</th>
+            <th>Proof</th> 
+            <th>Gender</th>
+            <th>Batch</th>
+            <th>Subject</th>
+            <th>District</th>
+            <th>Place</th>
+            <th colspan="2">Action</th>
+        </tr>
+        {% for i in teachers %}
+        <tr>
+            <td>{{forloop.counter}}</td>    
+            <td>{{i.teacher_name }}</td>
+            <td>{{i.teacher_email }}</td>
+            <td>{{i.teacher_contact }}</td>
+            <td>{{i.teacher_address }}</td>
+            <td><img src="{{ i.teacher_photo.url }}" alt="" width="100" height="100"></td>
+            <td><img src="{{ i.teacher_proof.url }}" alt="" width="100" height="100"></td>
+            <td>{{i.teacher_gender}}</td>
+            <td>{{i.subject_id.batch_id.batch_name}}</td>
+            <td>{{i.subject_id.subject_name}}</td>
+            <td>{{i.place_id.district_id.district_name}}</td>
+            <td>{{i.place_id.place_name}}</td>
+            <td><a href="{% url 'wadmin:teacher_accept' i.id %}">Accept</a></td>
+            <td><a href="{% url 'wadmin:teacher_reject' i.id %}">Reject</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <!-- Accepted Teachers -->
+    <table>
+        <tr>
+            <th>Sl.no</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Photo</th>
+            <th>Proof</th> 
+            <th>Gender</th>
+            <th>Batch</th>
+            <th>Subject</th>
+            <th>District</th>
+            <th>Place</th>
+            <th>Action</th>
+        </tr>
+        {% for i in teacher_accept %}
+        <tr>
+            <td>{{forloop.counter}}</td>    
+            <td>{{i.teacher_name }}</td>
+            <td>{{i.teacher_email }}</td>
+            <td>{{i.teacher_contact }}</td>
+            <td>{{i.teacher_address }}</td>
+            <td><img src="{{ i.teacher_photo.url }}" alt="" width="100" height="100"></td>
+            <td><img src="{{ i.teacher_proof.url }}" alt="" width="100" height="100"></td>
+            <td>{{i.teacher_gender}}</td>
+            <td>{{i.subject_id.batch_id.batch_name}}</td>
+            <td>{{i.subject_id.subject_name}}</td>
+            <td>{{i.place_id.district_id.district_name}}</td>
+            <td>{{i.place_id.place_name}}</td>
+            <td><a href="{% url 'wadmin:teacher_reject' i.id %}">Reject</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <!-- Rejected Teachers -->
+    <table>
+        <tr>
+            <th>Sl.no</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Photo</th>
+            <th>Proof</th> 
+            <th>Gender</th>
+            <th>Batch</th>
+            <th>Subject</th>
+            <th>District</th>
+            <th>Place</th>
+            <th>Action</th>
+        </tr>
+        {% for i in teacher_reject %}
+        <tr>
+            <td>{{forloop.counter}}</td>    
+            <td>{{i.teacher_name }}</td>
+            <td>{{i.teacher_email }}</td>
+            <td>{{i.teacher_contact }}</td>
+            <td>{{i.teacher_address }}</td>
+            <td><img src="{{ i.teacher_photo.url }}" alt="" width="100" height="100"></td>
+            <td><img src="{{ i.teacher_proof.url }}" alt="" width="100" height="100"></td>
+            <td>{{i.teacher_gender}}</td>
+            <td>{{i.subject_id.batch_id.batch_name}}</td>
+            <td>{{i.subject_id.subject_name}}</td>
+            <td>{{i.place_id.district_id.district_name}}</td>
+            <td>{{i.place_id.place_name}}</td>
+            <td><a href="{% url 'wadmin:teacher_accept' i.id %}">Accept</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

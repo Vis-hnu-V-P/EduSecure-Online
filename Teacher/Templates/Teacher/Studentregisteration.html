@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        form table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        form table th,
+        form table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        form table th {
+            width: 30%;
+            text-align: left;
+            background-color: #f2f2f2;
+        }
+        form table td {
+            width: 70%;
+        }
+        form table select,
+        form table input[type="text"],
+        form table input[type="file"] {
+            width: calc(100% - 6px); /* Adjust for border */
+            padding: 8px;
+            margin: 6px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        form table textarea {
+            width: calc(100% - 12px); /* Adjust for border */
+            padding: 8px;
+            margin: 6px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        form table input[type="submit"] {
+            width: auto;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        form table input[type="submit"]:hover {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Student Registration Form</h2>
+        <form id="form1" name="form1" method="post" action="" data-places-url="{% url 'wteacher:ajax_place' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <td><input type="text" name="txt_name" id="txt_name" required></td>
+                </tr>
+                <tr>
+                    <th>Contact</th>
+                    <td><input type="text" name="txt_contact" id="txt_contact" required></td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td><input type="email" name="txt_email" id="txt_email" required></td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td><textarea name="txt_address" id="txt_address" rows="5" required></textarea></td>
+                </tr>
+                <tr>
+                    <th>Photo</th>
+                    <td><input type="file" name="txt_photo" id="txt_photo" accept="image/*" required></td>
+                </tr>
+                <tr>
+                    <th>District</th>
+                    <td>
+                        <select name="txt_district" id="txt_district" required>
+                            <option value="">--Select--</option>
+                            {% for i in district %}
+                                <option value="{{i.id}}">{{ i.district_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Batch</th>
+                    <td><select name="txt_batch" id="txt_batch">
+                        <option value="">Select</option>
+                        {% for i in batch %}
+                        <option value="{{i.id}}">{{i.batch_name}}</option>
+                        {% endfor %}
+                    </select>      </td>
+                  </tr>
+                  <tr>
+                <tr>
+                    <th>Place</th>
+                    <td><select name="txt_place" id="txt_place" required>
+                        <option value="">--Select--</option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <th>Gender</th>
+                    <td>
+                        <input type="radio" name="gender" id="Male" value="Male" required><label for="Male">Male</label>
+                        <input type="radio" name="gender" id="Female" value="Female" required><label for="Female">Female</label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Password</th>
+                    <td><input type="password" name="txt_password" id="txt_password" required></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="submit" name="txt_submit" id="txt_submit" value="Submit"></td>
+                </tr>
+                <a href="{% url 'wteacher:index' %}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">Home</a>
+            </table>
+        </form>
+    </body>
+    </html>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $("#txt_district").change(function () {
+            var did = $(this).val();
+            var ur = $("#form1").attr("data-places-url");
+            $.ajax({
+                url: ur,
+                data: { disid: did, },
+                success: function (data) {
+                    $("#txt_place").html(data);
+                },
+            });
+        });
+    </script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("#txt_batch").change(function () {
+        var did = $(this).val();
+        var ur = $("#form1").attr("data-subjects-url");
+        $.ajax({
+            url: ur,
+            data: { bthid: did, },
+            success: function (data) {
+                $("#txt_subject").html(data);
+            },
+        });
+    });
+</script>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Complaint</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        form {
+            margin: 0 auto;
+            padding: 20px;
+            width: 80%;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"],
+        input[type="reset"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover,
+        input[type="reset"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+  <form id="form1" name="form1" method="post" action="">
+
+      <div align="center">
+        {% csrf_token %}
+        <table width="345" height="100" border="1" align="center">
+            <tr>
+                <td>Title:</td>
+                <td><input type="text" name="txt_title"></td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td>
+                  <textarea name="txt_description" id="" cols="30" rows="10">
+                  </textarea>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2" scope="row"><div align="center">
+                  <input type="submit" name="txt_submit" id="txt_submit" value="Submit" />
+                  <input type="reset" name="txt_reset" id="txt_reset" value="Reset" />
+                </div></th>
+            </tr>
+        </table>
+      </div>
+    </form>
+</body>
+</html>

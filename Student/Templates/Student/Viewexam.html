@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewExam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff; /* Blue color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker shade of blue on hover */
+        }
+
+        /* Style the modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+    </style>
+</head>
+<body>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="notificationMessage">Your notification message here!</p>
+        </div>
+    </div>
+
+
+    <div id="container">
+        <h1 style="text-align: center;">View Exam</h1>
+        <form id="form1" name="form1" method="post" action="" data-subject-url="{% url 'wadmin:ajaxsubject' %}">
+            <div>
+                {% csrf_token %}
+                <label for="batch">Batch:</label>
+                <select id="ddl_batch" name="ddl_batch">
+                    <option value="">Select</option>
+                    {% for i in batch %}
+                    <option value="{{i.id}}">{{i.batch_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div>
+                <label for="subject">Subject:</label>
+                <select id="ddl_subject" name="ddl_subject">
+                    <option value="">Select</option>
+                    {% for i in subject %}
+                    <option value="{{i.id}}">{{i.subject_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div>
+                <button type="submit" name="txt_submit" id="txt_submit" value="Submit">Submit</button>
+            </div>
+            <br>
+                <a href="{% url 'wstudent:homepage' %}" class="back-button">Home</a>
+        </form>
+
+        
+          
+        <table>
+            <thead>
+                <tr>
+                    <th>Exam Date</th>
+                    <th>Subject</th>
+                    <th>View Questions</th>
+                </tr>
+                {% for i in exam %}
+                <tr>
+                    <td>{{i.exam_date}}</td>
+                    <td>{{i.subjectid.subject_name}}</td>
+                    <td>
+                        {% if i.exam_status == 1 %}
+                            <a href="{% url 'wstudent:ExamReg' i.id  %}">Start Exam</a>
+                        {% elif i.exam_status == 2 %}
+                        {% comment %} <a href="{% url 'wstudent:viewmark' i.id %}">View Mark</a> {% endcomment %}
+                            <button id="showNotificationButton">View Mark</button>
+                        {% elif i.exam_status == 0 %}
+                            Exam Not Yet Ready To Start
+                        {% endif %} 
+
+                    </td>
+                    
+                </tr>
+                {% endfor %}
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("#ddl_batch").change(function () {
+        var did = $(this).val();
+        var ur = $("#form1").attr("data-subject-url");
+        $.ajax({
+            url: ur,
+            data: { bsid: did, },
+            success: function (data) {
+                $("#ddl_subject").html(data);
+            },
+        });
+    });
+</script>
+
+<script>
+    // Function to show the modal dialog
+    function showModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "block";
+    }
+
+    // Get the button element
+    var button = document.getElementById("showNotificationButton");
+
+    // Add a click event listener to the button
+    button.addEventListener("click", function() {
+        // Assuming you have a variable 'message' containing the notification message
+        var message = "Mark = 49";
+        
+        // Set the notification message
+        document.getElementById("notificationMessage").innerText = message;
+
+        // Show the modal dialog
+        showModal();
+    });
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      var modal = document.getElementById("myModal");
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      var modal = document.getElementById("myModal");
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>

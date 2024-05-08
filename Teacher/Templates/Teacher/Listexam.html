@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Exam</title>
+    <style>
+       body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f5f9; /* Light blue background */
+    margin: 0;
+    padding: 0;
+}
+
+table {
+    border-collapse: collapse;
+    width: 90%;
+    margin: 20px auto; /* Center the table */
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px; /* Adjust font size */
+}
+
+th {
+    background-color: #f2f2f2; /* Light gray background for table headers */
+}
+
+a {
+    color: #007bff; /* Blue color for links */
+    text-decoration: none; /* Remove underlines from links */
+}
+
+/* Style for button */
+.button {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text color */
+    border: none; /* Remove borders */
+    padding: 8px 16px; /* Padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Display as inline block */
+    font-size: 14px; /* Font size */
+    margin: 4px 2px; /* Margin */
+    cursor: pointer; /* Add cursor on hover */
+    border-radius: 4px; /* Rounded corners */
+}
+
+.button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Style for back button */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text color */
+    border: none; /* Remove borders */
+    padding: 8px 16px; /* Padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    font-size: 14px; /* Font size */
+    cursor: pointer; /* Add cursor on hover */
+    border-radius: 4px; /* Rounded corners */
+}
+
+.back-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Style for submit button */
+button[type="submit"] {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text color */
+    border: none; /* Remove borders */
+    padding: 8px 16px; /* Padding */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Add cursor on hover */
+    font-size: 14px; /* Font size */
+    display: block; /* Make it a block element */
+    margin: 0 auto; /* Center the button */
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- Back button -->
+    <a href="#" onclick="history.back()" class="back-button">Back</a>
+
+    <br>
+    <br>
+    <br>
+
+    <form method="post">
+        <div align="center">
+            {% csrf_token %}
+            <label for="batch">Batch:</label>
+            <select id="ddl_batch" name="ddl_batch">
+                <option value="">Select</option>
+                {% for i in batch %}
+                <option value="{{i.id}}">{{i.batch_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <div>
+            <button type="submit" name="txt_submit" id="txt_submit" value="Submit" class="button">Submit</button>
+        </div>
+            <table width="345" height="70" border="1" align="center">
+                <tr>
+                    <td>SI.NO</td>
+                    <td>Date</td>
+                    <td>Batch</td>
+                    <td>Subject</td>
+                    <td>Status</td>
+                    <td>View Student</td>
+                </tr>
+                {% for i in exam %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ i.exam_date }}</td>
+                    <td>{{ i.batchid.batch_name }}</td>
+                    <td>{{ i.subjectid.subject_name }}</td>
+                    <td>{{ i.exam_status }}</td>
+                    <td>
+                        {% if i.exam_status == 1 %}
+                            <a href="{% url 'wteacher:viewstudent' i.id bid  %}" class="button">View Student</a>
+                        {% else %}
+                            Exam Not Yet Completed
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </form>
+</body>
+</html>

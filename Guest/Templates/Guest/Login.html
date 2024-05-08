@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: linear-gradient(to right, #2980b9, #6dd5fa, #ffffff); /* Gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            width: 300px;
+            padding: 30px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.9); /* Added background color with opacity */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse; /* Collapse table borders */
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            text-align: left;
+            color: #555;
+        }
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f2f2f2; /* Light gray background */
+            transition: background-color 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            background-color: #e6e6e6; /* Light gray background on focus */
+            outline: none;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        input[type="submit"]:last-child {
+            margin-top: 10px;
+            background-color: #ddd;
+            color: #555;
+        }
+        input[type="submit"]:last-child:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" name="form1" method="post" action="">
+        <div align="center">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <th scope="row">Email</th>
+                    <td><input type="text" name="txt_email" id="txt_email" autocomplete="off" required /></td>
+                </tr>
+                <tr>
+                    <th scope="row">Password</th>
+                    <td><input type="password" name="txt_password" id="txt_password" autocomplete="off" required /></td>
+                </tr>
+                <tr>
+                    <th colspan="2" scope="row">
+                        <input type="submit" name="Login" value="Login" />
+                        <input type="submit" name="cancel" value="Cancel" />
+                    </th>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+</html>

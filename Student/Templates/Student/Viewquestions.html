@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewQuestions</title>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa; /* Light gray background */
+            color: #333; /* Dark gray text color */
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            position: relative; /* Position relative for absolute positioning of button */
+        }
+
+        .section {
+            padding: 20px;
+            margin-bottom: 30px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: #007bff; /* Blue color for section titles */
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            text-align: center; /* Center the section title */
+        }
+
+        .question {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .question p {
+            margin: 0;
+            font-size: 16px; /* Increase font size for better readability */
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #007bff; /* Blue color for question numbers */
+        }
+
+        .answer-link {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .answer-link:hover {
+            text-decoration: underline;
+        }
+
+        .finish-button {
+            display: block;
+            margin: 0 auto;
+            margin-top: 20px; /* Add some space between questions and finish button */
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none; /* Remove default underline */
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .finish-button:hover {
+            background-color: #0056b3; /* Darker shade of blue on hover */
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .section-title {
+                font-size: 20px;
+            }
+            .question {
+                padding: 10px;
+            }
+            .answer-link {
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="timer"align="center">Time Left: 10:00</h1> <!-- Timer display -->
+        {% for i in exam %}
+        <div class="section">
+            <h2 class="section-title">
+                {{ i.section }} 
+            </h2>
+            {% for j in i.examqst %}
+            <div class="question">
+                <p>
+                    <span class="question-number">{{ forloop.parentloop.counter }}.{{ forloop.counter }}. </span>{{ j.question }}
+                </p>
+                <a href="{% url 'wstudent:answer' j.id exid %}" class="answer-link">Answer</a> 
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <a href="{% url 'wstudent:examcompletecheck' exid=exid %}" class="finish-button">Finish</a>
+    </div>
+    <script>
+        // Timer function
+        function startTimer(duration, display) {
+            console.log("Timer")
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+    
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+    
+                display.textContent = "Time Left: " + minutes + ":" + seconds;
+    
+                if (--timer < 0) {
+                    timer = 0; // Set timer to 0 when time is up
+                    // Perform actions when time is up
+                    alert("Time's up! Your exam will now be finished.");
+                    // Redirect to the finish URL
+                    window.location.href = "{% url 'wstudent:timeout' exid=exid %}";
+                    ;
+                }
+            }, 1000);
+        }
+    
+        // Start the timer when the page loads
+        window.onload = function () {
+            console.log('Start')
+            var duration = 600; // Exam duration in seconds (10 minutes)
+            var display = document.getElementById("timer");
+            startTimer(duration, display);
+        };
+    </script>  
+        // Check if there's a message in the page
+        {% if messages %}
+            // Loop through each message
+            {% for message in messages %}
+                // Display the message using JavaScript alert
+                <script>
+                alert("{{ message }}");
+                </script>
+            {% endfor %}
+        {% endif %}
+</body>
+</html>

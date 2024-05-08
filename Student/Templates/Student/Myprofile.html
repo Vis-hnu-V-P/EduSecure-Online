@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>MyProfile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form {
+            width: 400px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+        }
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+        img {
+            display: block;
+            margin: 0 auto; /* Center the image horizontally */
+            width: 250px; /* Adjust the width */
+            height: 250px; /* Adjust the height */
+            object-fit: cover; /* Maintain aspect ratio and cover the entire space */
+            border-radius: 8px; /* Optional: Adds rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Adds a shadow effect */
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <br>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td colspan="2"><img src="{{ student.student_photo.url }}" alt="Profile Picture"></td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>{{ student.student_name }}</td>
+            </tr>
+            <tr>
+                <td>Contact</td>
+                <td>{{ student.student_contact }}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{ student.student_email }}</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>{{ student.student_address }}</td>
+            </tr>
+            <tr>
+                <td><a href="{% url 'wstudent:editprofile' %}">Edit Profile</a></td>
+                <td><a href="{% url 'wstudent:changepassword' %}">Change Password</a></td>
+            </tr>
+        </table>
+        <a href="{% url 'wstudent:homepage' %}" class="back-button">Back</a>
+    </form>
+</body>
+</html>

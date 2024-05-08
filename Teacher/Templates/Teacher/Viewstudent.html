@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Students</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f5f9; /* Light blue background */
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin: 20px auto; /* Center the table */
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px; /* Adjust font size */
+        }
+
+        th {
+            background-color: #f2f2f2; /* Light gray background for table headers */
+        }
+
+        /* Back button style */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back button -->
+    <button class="back-button" onclick="goBack()">Back</button>
+    
+
+    <br>
+    <br>
+    <br>
+    <!-- Students table -->
+    <table border="1">
+        <tr>
+            <th>SI.NO</th>
+            <th>Name</th>
+            <th colspan="2">Action</th>
+        </tr>
+        {% for i in exstudents %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.student_id.student_name }}</td> 
+            
+            <td>
+                {% if i.answer_mark %}
+                    {{ i.answer_mark }}
+                {% else %}
+                    <a href="{% url 'wteacher:viewanswers' i.id %}">Evaluate</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- JavaScript function to go back -->
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Section</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            margin: 20px auto;
+            width: 80%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"],
+        button[type="button"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        button[type="button"]:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button type="button" class="back-button" onclick="window.history.back()">Back</button>
+
+    <form id="form1" name="form1" method="post" action="">
+        {% csrf_token %}
+        <div align="center">
+            <table width="345" height="237" border="1" align="center">
+                <tr>
+                    <td>Section</td>
+                    <td><input type="text" name="txt_section"></td>
+                </tr>
+                <tr>
+                    <td>Mark</td>
+                    <td><input type="text" name="txt_mark"></td>
+                </tr>
+                <tr>
+                    <td>Number of Questions</td>
+                    <td><input type="text" name="txt_qstn"></td>
+                </tr>
+                <tr>
+                    <th colspan="2" scope="row">
+                        <div align="center">
+                            <input type="submit" name="txt_submit" id="txt_submit" value="Submit" />
+                        </div>
+                    </th>
+                </tr>
+            </table>
+            <br>
+            <table width="345" height="70" border="1" align="center">
+                <tr>
+                    <td>SI.NO</td>
+                    <td>Section</td>
+                    <td>Mark</td>
+                    <td>Number of Questions</td>
+                    <td colspan="2">Action</td>
+                </tr>
+                {% for i in section %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.section_name}}</td>
+                    <td>{{i.section_mark}}</td>
+                    <td>{{i.section_qstn}}</td>
+                    <td><a href="{% url 'wteacher:delete_section' i.id %}">Delete</a></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </form>
+</body>
+</html>

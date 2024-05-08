@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Question and Answers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f5f9; /* Light blue background */
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto; /* Center the table */
+            border-collapse: collapse;
+            border: 2px solid #007bff; /* Blue border */
+        }
+
+        th, td {
+            border: 1px solid #007bff; /* Blue border for cells */
+            padding: 10px;
+            text-align: center;
+            font-size: 16px; /* Adjust font size */
+        }
+
+        th {
+            background-color: #007bff; /* Blue background for headers */
+            color: #fff; /* White text color for headers */
+        }
+
+        /* Back button style */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 9999;
+        }
+
+        /* Submit button style */
+        .submit-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none; /* Remove underline */
+            display: inline-block; /* Make it inline block */
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Total answers section style */
+        .total-answers {
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        /* Center align content */
+        .center-align {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back button -->
+    <button class="back-button" onclick="goBack()">Back</button>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+
+    <!-- Answer table -->
+    <form action method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>SI.NO</th>
+                <th>Questions</th>
+                <th>Answer</th>
+                <th>Mark</th>
+            </tr>
+            {% for answer in answers %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ answer.question_id.question}}</td>
+                <td>{{ answer.answer_content }}</td>
+                
+                <td>
+                    {% if answer.answer_mark == null %}
+                    <button type="button" class="evaluate-button" data-answer-id="{{answer.id}}" data-section-mark="{{answer.question_id.sectiondata.section_mark}}">Evaluate</button>
+                    {% else %}
+                    {{answer.answer_mark}}
+                    {% endif %}
+
+                </td>
+            </tr>    
+            {% endfor %}
+        </table>
+        <p class="total-answers">Total Answers: {{ total_answers }}</p>
+        {% comment %} <p class="total-answers">Section Marks:</p> {% endcomment %}
+
+        <div class="center-align">
+            <input type="submit" name="txt_submit" id="txt_submit" value="Submit" class="submit-button"> 
+        </div>
+    </form>
+             
+    <!-- JavaScript function to go back -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("button.evaluate-button").click(function() {
+                var answerId = $(this).data("answer-id");
+                var sectionMark = $(this).data("section-mark");
+                mark(answerId, sectionMark);
+            });
+        });
+        function mark(id, mark) {
+            // Show a prompt box and store the value entered by the user in a variable
+            var answerMark = prompt("Enter the mark out of " + mark);
+            console.log(mark);
+        
+            // Check if the user entered a value
+            if (answerMark <= mark) {
+                // Log the value to the console
+                console.log("Answer mark:", answerMark);
+                var csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+        
+                // AJAX request to update the mark
+                var url = "{% url 'wteacher:evaluate' %}";
+                $.ajax({
+                    type: 'POST', // Use a comma instead of an equal sign
+                    url: url,
+                    data: {
+                        'csrfmiddlewaretoken': csrfToken,
+                        'mark': answerMark,
+                        'aid': id
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        alert('Mark Updated')
+                        location.reload();
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                        alert('Something went wrong. Try Again')
+                    }
+                });
+                
+            } else {
+                alert('Entered Mark Out Of Range');
+            }
+        }
+        
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

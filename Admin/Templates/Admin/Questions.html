@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f5f9; /* Light blue background */
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2; /* Light gray background for table headers */
+        }
+
+        textarea, select {
+            width: calc(100% - 18px);
+            padding: 8px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff; /* Blue color for submit button */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3; /* Darker blue color on hover */
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff; /* Blue color for links */
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Back button style */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back button -->
+    <a href="{% url 'wadmin:homepage' %}" class="back-button">Back</a>
+
+    <!-- Form -->
+    <form id="QuestionForm" name="form1" method="post" action="" data-subject-url="{% url 'wadmin:ajaxsubject' %}">
+        {% csrf_token %}
+        <div align="center">
+            <table width="345" height="237" border="1" align="center">
+                <tr>
+                    <td>Section</td>
+                    <td>
+                        <select name="ddl_section" id="">
+                            <option value=" ">Select</option>
+                            {% for i in section %}
+                            <option value="{{i.id}}">{{i.section_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Question</th>
+                    <td>
+                        <div align="center">
+                            <textarea name="txt_question" id="txt_question" cols="45" rows="5"></textarea>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Batch</td>
+                    <td>
+                        <select name="ddl_batch" id="batch">
+                            <option value=" ">Select</option>
+                            {% for i in batch %}
+                            <option value="{{i.id}}">{{i.batch_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Subject</td>
+                    <td>
+                        <select name="ddl_subject" id="subject">
+                            <option value=" ">Select</option>
+                            {% for i in subject %}
+                            <option value="{{i.id}}">{{i.subject_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" scope="row">
+                        <div align="center">
+                            <input type="submit" name="txt_submit" id="txt_submit" value="Submit" />
+                        </div>
+                    </th>
+                </tr>
+            </table>
+            <br>
+            <table width="345" height="70" border="1" align="center">
+                <tr>
+                    <td>SI.NO</td>
+                    <td>Session</td>
+                    <td>Question</td>
+                    <td>Batch</td>
+                    <td>Subject</td>
+                    <td colspan="2">Action</td>
+                </tr>
+                {% for i in question %}
+                <tr>
+                    <td>{{forloop.counter}}</td> 
+                    <td>{{i.sectiondata.section_name}}</td>
+                    <td>{{i.question}}</td>
+                    <td>{{i.batchdata.batch_name}}</td>
+                    <td>{{i.subjectdata.subject_name}}</td>
+                    <td><a href="{% url 'wadmin:delete_questions' i.id %}">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $("#batch").change(function () {
+            var did = $(this).val();
+            var ur = $("#QuestionForm").attr("data-subject-url");
+            $.ajax({
+                url: ur,
+                data: { bsid: did, },
+                success: function (data) {
+                    $("#subject").html(data);
+                },
+            });
+        });
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+    <script>
+        // Check if there's a message in the page
+        {% if messages %}
+            // Loop through each message
+            {% for message in messages %}
+                // Display the message using JavaScript alert
+                alert("{{ message }}");
+            {% endfor %}
+        {% endif %}
+    </script>
+</body>
+</html>

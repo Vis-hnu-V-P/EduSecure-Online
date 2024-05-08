@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>District</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f5f9; /* Light blue background */
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2; /* Light gray background for table headers */
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff; /* Blue color for submit button */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3; /* Darker blue color on hover */
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff; /* Blue color for links */
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Back button style */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back button -->
+    <a href="{% url 'wadmin:homepage' %}" class="back-button">Back</a>
+
+    <!-- Form -->
+    <form id="form1" name="form1" method="post" action="">
+        {% csrf_token %}
+        <div align="center">
+            <table width="345" height="100" border="1" align="center">
+                <tr>
+                    <td>District:</td>
+                    <td><input type="text" name="txt_district" value="{{ Edit.district_name }}"></td>
+                </tr>
+                <tr>
+                    <th colspan="2" scope="row"><div align="center">
+                        <input type="submit" name="txt_submit" id="txt_submit" value="Submit" />
+                    </div></th>
+                </tr>
+            </table>
+            <br>
+            <table width="345" height="70" border="1" align="center">
+                <tr>
+                    <td>SI.NO</td>
+                    <td>District</td>
+                    <td colspan="2">Action</td>
+                </tr>
+                {% for i in district %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.district_name}}</td>
+                    <td><a href="{% url 'wadmin:delete_district' i.id %}">Delete</a></td>
+                    <td><a href="{% url 'wadmin:edit_district' i.id %}">Edit</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </form>
+</body>
+</html>
